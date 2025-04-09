@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Scoring</title>
+</head>
+<body>
+    <h1>Score Your Text</h1>
+    <form id="scoreForm">
+        <label for="text">Enter text:</label>
+        <textarea id="text" name="text" rows="4" cols="50"></textarea>
+        <br>
+        <button type="button" onclick="scoreText()">Score</button>
+    </form>
+    <h2>Result:</h2>
+    <p id="result"></p>
+    
+    <script>
+        function scoreText() {
+            const text = document.getElementById("text").value;
+            fetch("/score", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = 
+                    `Prediction: ${data.prediction}, Propensity: ${data.propensity.toFixed(4)}`;
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error scoring text";
+            });
+        }
+    </script>
+</body>
+</html>
